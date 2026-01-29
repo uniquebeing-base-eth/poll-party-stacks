@@ -13,14 +13,29 @@ interface PollCardProps {
 
 export const PollCard = ({ poll, index = 0 }: PollCardProps) => {
   const blocksRemaining = poll.endBlock - poll.currentBlock;
-  const timeEstimate = Math.max(0, Math.floor(blocksRemaining * 10 / 60)); // ~10 min per block
-  
-  const leadingOption = poll.options.reduce((prev, current) => 
+  const timeEstimate = Math.max(0, Math.floor((blocksRemaining * 10) / 60)); // ~10 min per block
+
+  const leadingOption = poll.options.reduce((prev, current) =>
     prev.votes > current.votes ? prev : current
   );
-  const leadingPercentage = poll.totalVotes > 0 
-    ? Math.round((leadingOption.votes / poll.totalVotes) * 100) 
-    : 0;
+
+  const leadingPercentage =
+    poll.totalVotes > 0 ? Math.round((leadingOption.votes / poll.totalVotes) * 100) : 0;
+
+  const statusBadge = poll.isActive ? (
+    <Badge
+      variant="default"
+      className="bg-success/20 text-success border-success/30"
+    >
+      <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+      Active
+    </Badge>
+  ) : (
+    <Badge variant="secondary">
+      <CheckCircle2 className="mr-1.5 h-3 w-3" />
+      Ended
+    </Badge>
+  );
 
   return (
     <motion.div
@@ -32,29 +47,12 @@ export const PollCard = ({ poll, index = 0 }: PollCardProps) => {
         <div className="glass-card glow-border p-6 transition-all duration-300 hover:border-primary/30">
           {/* Header */}
           <div className="flex items-start justify-between gap-4 mb-4">
-            <Badge 
-              variant={poll.isActive ? 'default' : 'secondary'}
-              className={poll.isActive ? 'bg-success/20 text-success border-success/30' : ''}
-            >
-              {poll.isActive ? (
-                <>
-                  <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-                  Active
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 className="mr-1.5 h-3 w-3" />
-                  Ended
-                </>
-              )}
-            </Badge>
+            {statusBadge}
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </div>
 
           {/* Question */}
-          <h3 className="text-lg font-semibold mb-4 line-clamp-2">
-            {poll.question}
-          </h3>
+          <h3 className="text-lg font-semibold mb-4 line-clamp-2">{poll.question}</h3>
 
           {/* Leading Option */}
           <div className="mb-4">
