@@ -32,7 +32,7 @@ export const WalletButton = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem 
+          <DropdownMenuItem
             onClick={disconnectWallet}
             className="gap-2 cursor-pointer text-destructive focus:text-destructive"
           >
@@ -46,10 +46,7 @@ export const WalletButton = () => {
 
   return (
     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-      <Button 
-        onClick={connectWallet}
-        className="gap-2 btn-primary-glow"
-      >
+      <Button onClick={connectWallet} className="gap-2 btn-primary-glow">
         <Wallet className="h-4 w-4" />
         Connect Wallet
       </Button>
