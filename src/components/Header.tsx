@@ -1,17 +1,18 @@
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { WalletButton } from './WalletButton';
 import { Plus, Gift } from 'lucide-react';
 import { motion } from 'framer-motion';
 import pollbagLogo from '@/assets/pollbag-logo.png';
 
-export const Header = () => {
-  const location = useLocation();
+const NAV_ITEMS = [
+  { path: '/', label: 'Polls', icon: null },
+  { path: '/create', label: 'Create', icon: Plus },
+  { path: '/rewards', label: 'Rewards', icon: Gift },
+];
 
-  const navItems = [
-    { path: '/', label: 'Polls', icon: null },
-    { path: '/create', label: 'Create', icon: Plus },
-    { path: '/rewards', label: 'Rewards', icon: Gift },
-  ];
+export const Header: React.FC = () => {
+  const location = useLocation();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
@@ -24,7 +25,7 @@ export const Header = () => {
               whileHover={{ rotate: 10, scale: 1.05 }}
               transition={{ type: 'spring', stiffness: 400 }}
             >
-              <img src={pollbagLogo} alt="Pollbag" className="h-10 w-10" />
+              <img src={pollbagLogo} alt="Pollbag Logo" className="h-10 w-10" />
             </motion.div>
             <span className="text-xl font-bold">
               Poll<span className="text-gradient">bag</span>
@@ -33,7 +34,7 @@ export const Header = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map(({ path, label, icon: Icon }) => {
+            {NAV_ITEMS.map(({ path, label, icon: Icon }) => {
               const isActive = location.pathname === path;
               return (
                 <Link
