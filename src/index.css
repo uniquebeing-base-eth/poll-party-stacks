@@ -42,9 +42,9 @@
     /* Custom tokens */
     --gradient-primary: linear-gradient(135deg, hsl(25 95% 53%), hsl(35 95% 60%));
     --gradient-card: linear-gradient(180deg, hsl(222 47% 10%) 0%, hsl(222 47% 8%) 100%);
-    --gradient-glow: radial-gradient(ellipse at center, hsl(25 95% 53% / 0.15) 0%, transparent 70%);
-    --shadow-glow: 0 0 40px -10px hsl(25 95% 53% / 0.5);
-    --shadow-card: 0 4px 24px -4px hsl(222 47% 4% / 0.5);
+    --gradient-glow: radial-gradient(ellipse at center, hsl(25 95% 53% / 0.25) 0%, transparent 70%);
+    --shadow-glow: 0 0 60px -5px hsl(25 95% 53% / 0.6);
+    --shadow-card: 0 8px 32px -6px hsl(222 47% 4% / 0.5);
 
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 40% 98%;
@@ -76,6 +76,12 @@
   .glass-card {
     @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-xl;
     box-shadow: var(--shadow-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px -4px hsl(222 47% 4% / 0.6);
   }
 
   .glow-border {
@@ -96,10 +102,25 @@
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: var(--gradient-primary);
+    transition: background-position 0.5s ease;
+    background-size: 200% 200%;
+  }
+
+  .text-gradient:hover {
+    background-position: right center;
   }
 
   .btn-primary-glow {
+    @apply relative inline-flex items-center justify-center;
+    background-image: var(--gradient-primary);
+    color: var(--primary-foreground);
     box-shadow: var(--shadow-glow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-primary-glow:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 80px -5px hsl(25 95% 53% / 0.7);
   }
 
   .stx-address {
