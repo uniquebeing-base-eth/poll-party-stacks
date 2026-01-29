@@ -1,9 +1,5 @@
-import { AppConfig, UserSession, showConnect } from '@stacks/connect';
+import { connect, disconnect, isConnected, getLocalStorage, request } from '@stacks/connect';
 import { STACKS_TESTNET, STACKS_MAINNET } from '@stacks/network';
-
-// App configuration
-export const appConfig = new AppConfig(['store_write', 'publish_data']);
-export const userSession = new UserSession({ appConfig });
 
 // Network configuration - using testnet for development
 export const network = STACKS_TESTNET;
@@ -13,40 +9,46 @@ export const mainnetNetwork = STACKS_MAINNET;
 export const CONTRACT_ADDRESS = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM'; // Replace with your deployed contract address
 export const CONTRACT_NAME = 'pollbag';
 
-// Helper functions
-export const connectWallet = (onSuccess?: () => void) => {
-  showConnect({
-    appDetails: {
-      name: 'Pollbag',
-      icon: window.location.origin + '/favicon.ico',
-    },
-    redirectTo: '/',
-    onFinish: () => {
+// Helper functions using the new @stacks/connect API
+export const connectWallet = async (onSuccess?: () => void) => {
+  try {
+    if (isConnected()) {
+      console.log('Already connected');
       if (onSuccess) onSuccess();
-      window.location.reload();
-    },
-    userSession,
-  });
+      return;
+    }
+    
+    const response = await connect();
+    console.log('Connected:', response);
+    if (onSuccess) onSuccess();
+  } catch (error) {
+    console.error('Failed to connect wallet:', error);
+  }
 };
 
 export const disconnectWallet = () => {
-  userSession.signUserOut('/');
+  disconnect();
 };
 
 export const isUserSignedIn = () => {
-  return userSession.isUserSignedIn();
+  return isConnected();
 };
 
 export const getUserAddress = () => {
-  if (!isUserSignedIn()) return null;
-  const userData = userSession.loadUserData();
-  return userData.profile.stxAddress.testnet;
+  const userData = getLocalStorage();
+  if (userData?.addresses) {
+    // Return testnet address
+    return userData.addresses.stx?.[0]?.address || null;
+  }
+  return null;
 };
 
 export const getMainnetAddress = () => {
-  if (!isUserSignedIn()) return null;
-  const userData = userSession.loadUserData();
-  return userData.profile.stxAddress.mainnet;
+  const userData = getLocalStorage();
+  if (userData?.addresses) {
+    return userData.addresses.stx?.[0]?.address || null;
+  }
+  return null;
 };
 
 export const truncateAddress = (address: string, chars = 4) => {
@@ -62,4 +64,25 @@ export const formatSTX = (microSTX: number | bigint) => {
 
 export const parseSTX = (stx: number) => {
   return Math.floor(stx * 1_000_000);
+};
+
+// Contract interaction helpers (for future use when contract is deployed)
+export const callContract = async (
+  contractAddress: string,
+  contractName: string,
+  functionName: string,
+  functionArgs: any[]
+) => {
+  try {
+    const response = await request('stx_callContract', {
+      contract: `${contractAddress}.${contractName}`,
+      functionName,
+      functionArgs,
+    } as any);
+    console.log('Transaction ID:', (response as any).txid);
+    return response;
+  } catch (error) {
+    console.error('Contract call failed:', error);
+    throw error;
+  }
 };

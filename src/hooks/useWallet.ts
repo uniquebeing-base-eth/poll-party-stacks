@@ -1,51 +1,54 @@
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  userSession, 
-  connectWallet as connect, 
-  disconnectWallet as disconnect,
-  getUserAddress,
-  isUserSignedIn 
-} from '@/lib/stacks';
+import { isConnected, getLocalStorage, disconnect } from '@stacks/connect';
+import { connectWallet as connect } from '@/lib/stacks';
 
 export const useWallet = () => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const checkConnection = () => {
-      const signedIn = isUserSignedIn();
-      setIsConnected(signedIn);
-      setAddress(signedIn ? getUserAddress() : null);
-      setIsLoading(false);
-    };
+  const checkConnection = useCallback(() => {
+    const connected = isConnected();
+    setIsWalletConnected(connected);
+    
+    if (connected) {
+      const userData = getLocalStorage();
+      if (userData?.addresses?.stx?.[0]?.address) {
+        setAddress(userData.addresses.stx[0].address);
+      }
+    } else {
+      setAddress(null);
+    }
+    setIsLoading(false);
+  }, []);
 
-    // Check on mount
+  useEffect(() => {
+    // Check connection on mount
     checkConnection();
 
-    // Check if there's a pending sign-in
-    if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn().then(() => {
-        checkConnection();
-      });
-    }
-  }, []);
+    // Poll for connection status changes (wallet might connect/disconnect externally)
+    const interval = setInterval(checkConnection, 1000);
+    
+    return () => clearInterval(interval);
+  }, [checkConnection]);
 
-  const connectWallet = useCallback(() => {
-    connect(() => {
-      setIsConnected(true);
-      setAddress(getUserAddress());
+  const connectWallet = useCallback(async () => {
+    setIsLoading(true);
+    await connect(() => {
+      checkConnection();
     });
-  }, []);
+    // Also check immediately in case connect completes synchronously
+    setTimeout(checkConnection, 500);
+  }, [checkConnection]);
 
   const disconnectWallet = useCallback(() => {
     disconnect();
-    setIsConnected(false);
+    setIsWalletConnected(false);
     setAddress(null);
   }, []);
 
   return {
-    isConnected,
+    isConnected: isWalletConnected,
     address,
     isLoading,
     connectWallet,
