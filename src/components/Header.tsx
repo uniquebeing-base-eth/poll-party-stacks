@@ -1,13 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
 import { WalletButton } from './WalletButton';
-import { Vote, Plus, Gift } from 'lucide-react';
+import { Plus, Gift } from 'lucide-react';
 import { motion } from 'framer-motion';
+import pollbagLogo from '@/assets/pollbag-logo.png';
 
 export const Header = () => {
   const location = useLocation();
 
   const navItems = [
-    { path: '/', label: 'Polls', icon: Vote },
+    { path: '/', label: 'Polls', icon: null },
     { path: '/create', label: 'Create', icon: Plus },
     { path: '/rewards', label: 'Rewards', icon: Gift },
   ];
@@ -19,11 +20,11 @@ export const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <motion.div 
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary"
+              className="flex h-10 w-10 items-center justify-center"
               whileHover={{ rotate: 10, scale: 1.05 }}
               transition={{ type: 'spring', stiffness: 400 }}
             >
-              <Vote className="h-5 w-5 text-primary-foreground" />
+              <img src={pollbagLogo} alt="Pollbag" className="h-10 w-10" />
             </motion.div>
             <span className="text-xl font-bold">
               Poll<span className="text-gradient">bag</span>
@@ -44,7 +45,7 @@ export const Header = () => {
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
+                  {Icon && <Icon className="h-4 w-4" />}
                   {label}
                   {isActive && (
                     <motion.div
