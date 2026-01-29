@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
-import { Poll, PollOption } from '@/types/poll';
+import { Poll } from '@/types/poll';
 import { cn } from '@/lib/utils';
 
 interface VoteOptionsProps {
@@ -14,6 +14,8 @@ interface VoteOptionsProps {
 export const VoteOptions = ({ poll, selectedOption, onSelect, disabled }: VoteOptionsProps) => {
   const [hoveredOption, setHoveredOption] = useState<number | null>(null);
 
+  const showResults = poll.hasVoted || !poll.isActive;
+
   return (
     <div className="space-y-3">
       {poll.options.map((option) => {
@@ -22,7 +24,6 @@ export const VoteOptions = ({ poll, selectedOption, onSelect, disabled }: VoteOp
           : 0;
         const isSelected = selectedOption === option.id;
         const isHovered = hoveredOption === option.id;
-        const showResults = poll.hasVoted || !poll.isActive;
 
         return (
           <motion.button
@@ -33,11 +34,10 @@ export const VoteOptions = ({ poll, selectedOption, onSelect, disabled }: VoteOp
             disabled={disabled || poll.hasVoted}
             className={cn(
               'relative w-full p-4 rounded-xl border text-left transition-all duration-300 overflow-hidden',
-              isSelected
+              isSelected || poll.userVote === option.id
                 ? 'border-primary bg-primary/10'
                 : 'border-border/50 bg-secondary/30 hover:border-border',
-              disabled && 'opacity-50 cursor-not-allowed',
-              poll.hasVoted && poll.userVote === option.id && 'border-primary bg-primary/10'
+              disabled && 'opacity-50 cursor-not-allowed'
             )}
             whileHover={!disabled && !poll.hasVoted ? { scale: 1.01 } : {}}
             whileTap={!disabled && !poll.hasVoted ? { scale: 0.99 } : {}}
@@ -72,12 +72,8 @@ export const VoteOptions = ({ poll, selectedOption, onSelect, disabled }: VoteOp
 
               {showResults && (
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-muted-foreground">
-                    {option.votes} votes
-                  </span>
-                  <span className="font-mono font-semibold text-primary">
-                    {percentage}%
-                  </span>
+                  <span className="text-sm text-muted-foreground">{option.votes} votes</span>
+                  <span className="font-mono font-semibold text-primary">{percentage}%</span>
                 </div>
               )}
             </div>
