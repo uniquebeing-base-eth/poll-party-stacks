@@ -1,4 +1,5 @@
 
+
 import { motion } from 'framer-motion';
 import { Gift, AlertCircle, CheckCircle2, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
