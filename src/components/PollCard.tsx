@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, Users, Coins, ChevronRight, CheckCircle2 } from 'lucide-react';
