@@ -12,6 +12,7 @@ import { formatSTX, truncateAddress } from '@/lib/stacks';
 import { useWallet } from '@/hooks/useWallet';
 import { useToast } from '@/hooks/use-toast';
 
+
 const PollDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
