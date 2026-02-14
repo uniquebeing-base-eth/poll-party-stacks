@@ -8,6 +8,7 @@ import { mockPolls } from '@/lib/mockData';
 import { formatSTX, truncateAddress } from '@/lib/stacks';
 import { useWallet } from '@/hooks/useWallet';
 
+
 const Rewards = () => {
   const { isConnected, connectWallet } = useWallet();
 
