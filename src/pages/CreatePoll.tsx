@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useWallet } from '@/hooks/useWallet';
 import { useToast } from '@/hooks/use-toast';
 
+
 const CreatePoll = () => {
   const navigate = useNavigate();
   const { isConnected, connectWallet } = useWallet();
