@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+
 const NotFound = () => {
   return (
     <div className="min-h-[80vh] flex items-center justify-center">
