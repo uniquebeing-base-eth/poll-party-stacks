@@ -3,6 +3,7 @@
 import { connect, disconnect, isConnected, getLocalStorage, request } from '@stacks/connect';
 import { STACKS_TESTNET, STACKS_MAINNET } from '@stacks/network';
 
+
 // Network configuration - using testnet for development
 export const network = STACKS_TESTNET;
 export const mainnetNetwork = STACKS_MAINNET;
