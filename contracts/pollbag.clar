@@ -1,3 +1,4 @@
+
 ;; Pollbag - A decentralized poll pool contract
 ;; Users can create polls, vote with STX, and claim rewards
 
