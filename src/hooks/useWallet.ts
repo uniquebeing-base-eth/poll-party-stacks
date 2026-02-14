@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { isConnected, getLocalStorage, disconnect } from '@stacks/connect';
 import { connectWallet as connect } from '@/lib/stacks';
 
+
 export const useWallet = () => {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
