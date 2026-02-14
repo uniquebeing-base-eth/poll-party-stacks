@@ -1,6 +1,7 @@
 import { Poll } from '@/types/poll';
 import { parseSTX } from './stacks';
 
+
 // Mock data for development - replace with actual contract calls
 export const mockPolls: Poll[] = [
   {
