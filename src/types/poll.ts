@@ -5,6 +5,7 @@ export interface PollOption {
   votes: number;
 }
 
+
 export interface Poll {
   id: string;
   creator: string;
