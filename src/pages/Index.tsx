@@ -9,6 +9,7 @@ import { PollCard } from '@/components/PollCard';
 import { mockPolls } from '@/lib/mockData';
 import { useWallet } from '@/hooks/useWallet';
 
+
 const Index = () => {
   const { isConnected } = useWallet();
   const [searchQuery, setSearchQuery] = useState('');
