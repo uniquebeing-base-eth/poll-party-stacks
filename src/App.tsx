@@ -12,6 +12,7 @@ import PollDetails from "./pages/PollDetails";
 import Rewards from "./pages/Rewards";
 import NotFound from "./pages/NotFound";
 
+
 const queryClient = new QueryClient();
 
 const App = () => (
