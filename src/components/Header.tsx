@@ -7,6 +7,7 @@ import { Plus, Gift } from 'lucide-react';
 import { motion } from 'framer-motion';
 import pollbagLogo from '@/assets/pollbag-logo.png';
 
+
 const NAV_ITEMS = [
   { path: '/', label: 'Polls', icon: null },
   { path: '/create', label: 'Create', icon: Plus },
